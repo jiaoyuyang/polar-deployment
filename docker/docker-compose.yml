@@ -6,7 +6,7 @@ services:
   catalog-service:
     depends_on:
       - polar-postgres
-    image: "catalog-service"
+    image: "catalog-service:0.0.1-SNAPSHOT"
     container_name: "catalog-service"
     ports:
       - 9001:9001
@@ -22,7 +22,7 @@ services:
       - SPRING_PROFILES_ACTIVE=testdata
 
   config-service:
-    image: "config-service"
+    image: "config-service:0.0.1-SNAPSHOT"
     container_name: "config-service"
     ports:
       - 8888:8888
@@ -37,7 +37,7 @@ services:
   # Backing Services
 
   polar-postgres:
-    image: "postgres:14.12"
+    image: "postgres:14.4"
     container_name: "polar-postgres"
     ports:
       - 5432:5432
