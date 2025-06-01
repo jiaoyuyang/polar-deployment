@@ -60,8 +60,13 @@ services:
       - 9000:9000
       - 8000:8000
     environment:
-      - CATALOG_SERVICE_URL=http://localhost:9001
-      - ORDER_SERVICE_URL=http://localhost:9002
+      # Buildpacks environment variable to enable debug through a socket on port 8000
+      - BPL_DEBUG_ENABLED=true
+      - BPL_DEBUG_PORT=8000
+      - CATALOG_SERVICE_URL=http://catalog-service:9001
+      - ORDER_SERVICE_URL=http://order-service:9002
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:8888
+      - SPRING_REDIS_HOST=polar-redis
 
   # Backing Services
   polar-postgres:
