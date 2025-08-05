@@ -53,6 +53,21 @@ services:
       - BPL_DEBUG_ENABLED=true
       - BPL_DEBUG_PORT=9888
 
+  dispatcher-service:
+    depends_on:
+      - polar-rabbitmq
+    image: "dispatcher-service:0.0.1-SNAPSHOT"
+    container_name: dispatcher-service
+    ports:
+      - 9003:9003
+      - 8003:8003
+    environment:
+      # Buildpacks environment variable to enable debug through a socket on port 8002
+      - BPL_DEBUG_ENABLED=true
+      - BPL_DEBUG_PORT=8003
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:8888
+      - SPRING_RABBITMQ_HOST=polar-rabbitmq
+
   edge-service:
     depends_on:
       - polar-redis
