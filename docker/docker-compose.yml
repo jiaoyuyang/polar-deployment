@@ -1,0 +1,52 @@
+version: "3.8"
+services:
+
+  # Applications
+
+  catalog-service:
+    depends_on:
+      - polar-postgres
+    image: "catalog-service:0.0.1-SNAPSHOT"
+    container_name: "catalog-service"
+    ports:
+      - 9001:9001
+      - 8001:8001
+    mem_limit: 768m
+    environment:
+      # Buildpacks environment variable to configure the number of threads in memory calculation
+      - BPL_JVM_THREAD_COUNT=50
+      # Buildpacks environment variable to enable debug through a socket on port 8001
+      - BPL_DEBUG_ENABLED=true
+      - BPL_DEBUG_PORT=8001
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:8888
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://polar-postgres:5432/polardb_catalog
+      - SPRING_PROFILES_ACTIVE=testdata
+      - JAVA_OPTS=-Xmx512m
+  
+  config-service:
+    image: "config-service:0.0.1-SNAPSHOT"
+    container_name: "config-service"
+    ports:
+      - 8888:8888
+      - 9888:9888
+    mem_limit: 768m
+    environment:
+      # Buildpacks environment variable to configure the number of threads in memory calculation
+      - BPL_JVM_THREAD_COUNT=50
+      # Buildpacks environment variable to enable debug through a socket on port 9888
+      - BPL_DEBUG_ENABLED=true
+      - BPL_DEBUG_PORT=9888
+      - JAVA_OPTS=-Xmx384m
+
+  # Backing Services
+
+  polar-postgres:
+    image: "postgres:14.4"
+    container_name: "polar-postgres"
+    ports:
+      - 5432:5432
+    mem_limit: 384m
+    environment:
+      - POSTGRES_USER=jiaoyuyang
+      - POSTGRES_PASSWORD=haohaoxuexi
+      - POSTGRES_DB=polardb_catalog
